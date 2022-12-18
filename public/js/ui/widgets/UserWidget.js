@@ -3,7 +3,7 @@
  * отображение информации о имени пользователя
  * после авторизации или его выхода из системы
  * */
-
+'use strict'
 class UserWidget {
   /**
    * Устанавливает полученный элемент
@@ -11,8 +11,15 @@ class UserWidget {
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
    * */
-  constructor(element){
-
+  constructor(element) {
+    try {
+      if (!element) {
+        throw new Error('Передан пустой элемент!');
+      }
+      this.element = element;
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   /**
@@ -22,7 +29,10 @@ class UserWidget {
    * в элемент .user-name устанавливает имя
    * авторизованного пользователя
    * */
-  update(){
-
+  update() {
+    const user = User.current();
+    if (user) {
+      this.element.querySelector('.user-name').textContent = user.name;
+    }
   }
-}
+};

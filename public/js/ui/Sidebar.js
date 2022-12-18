@@ -2,11 +2,12 @@
  * Класс Sidebar отвечает за работу боковой колонки:
  * кнопки скрытия/показа колонки в мобильной версии сайта
  * и за кнопки меню
- * */
-class Sidebar {
-  /**
+ **/
+/** 
    * Запускает initAuthLinks и initToggleButton
-   * */
+   **/
+'use strict'
+class Sidebar {
   static init() {
     this.initAuthLinks();
     this.initToggleButton();
@@ -18,7 +19,13 @@ class Sidebar {
    * при нажатии на кнопку .sidebar-toggle
    * */
   static initToggleButton() {
-
+    const sidebarMini = document.querySelector('.sidebar-mini');
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    sidebarToggle.addEventListener('click', (event) => {
+      event.preventDefault();
+      sidebarMini.classList.toggle('sidebar-open');
+      sidebarMini.classList.toggle('sidebar-collapse');
+    });
   }
 
   /**
@@ -29,6 +36,25 @@ class Sidebar {
    * выходу устанавливает App.setState( 'init' )
    * */
   static initAuthLinks() {
+    const sidebarMenu = document.querySelector('.sidebar-menu');
 
+    sidebarMenu.addEventListener('click', event => {
+      event.preventDefault();
+      if (event.target.closest('.menu-item_register')) {
+        App.getModal('register').open();
+      }
+      if (event.target.closest('.menu-item_login')) {
+        App.getModal('login').open();
+      }
+      if (event.target.closest('.menu-item_logout')) {
+        User.logout(null, (err, response) => {
+          if (response.success) {
+            App.setState('init');
+          } else {
+            console.error ('Error: ', err)
+          }
+        });
+      }
+    });
   }
-}
+};

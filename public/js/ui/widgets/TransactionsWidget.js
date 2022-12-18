@@ -3,8 +3,8 @@
  * открытие всплывающих окон для
  * создания нового дохода или расхода
  * */
-
-class TransactionsWidget {
+'use strict'
+ class TransactionsWidget {
   /**
    * Устанавливает полученный элемент
    * в свойство element.
@@ -12,7 +12,15 @@ class TransactionsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-
+    try {
+      if (!element) {
+        throw new Error('Элемент не существует!');
+      }
+      this.element = element;
+      this.registerEvents();
+    } catch (error) {
+      console.error('Error: ', error);
+    }
   }
   /**
    * Регистрирует обработчики нажатия на
@@ -21,6 +29,17 @@ class TransactionsWidget {
    * экземпляра окна
    * */
   registerEvents() {
+    const newIncomeBtn = document.querySelector('.create-income-button');
+    const newExpenseBtn = document.querySelector('.create-expense-button');
 
+    newIncomeBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      App.getModal('newIncome').open();
+    });
+
+    newExpenseBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      App.getModal('newExpense').open();
+    });
   }
-}
+};
